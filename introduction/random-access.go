@@ -45,8 +45,9 @@ func random_array_access(loops int, n int) {
 	fmt.Printf("mean resolution: %g ns\n", mean)
 }
 
+/*
 func main() {
-	var smallSliceSize, mediumSliceSize, largeSliceSize, largestSliceSize, loops = 100, 1000, 10000, 100000, 1000000
+	var smallSliceSize, mediumSliceSize, largeSliceSize, largestSliceSize, loops = 100, 1000, 10000, 15000, 1000000
 	fmt.Printf("Small size array: ")
 	random_array_access(loops, smallSliceSize)
 
@@ -59,4 +60,4 @@ func main() {
 	fmt.Printf("Largest size array: ")
 	random_array_access(loops, largestSliceSize)
 
-}
+}*/
