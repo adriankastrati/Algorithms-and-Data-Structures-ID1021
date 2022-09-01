@@ -6,13 +6,16 @@ import (
 	"time"
 )
 
-func search_for_item(key_length int, value_length int, amount_operations int) float64 {
+func find_duplicates(key_length int, value_length int, amount_operations int) (time_average float64, sum int) {
 	var (
 		time_total  time.Duration
-		slice_key       = make([]int, key_length)
-		slice_value     = make([]int, value_length)
-		sum         int = 0
+		slice_key   = make([]int, key_length)
+		slice_value = make([]int, value_length)
 	)
+
+	sum = 0
+
+	rand.Seed(time.Now().UTC().UnixNano())
 
 	for j := 0; j < amount_operations; j++ {
 		for i := 0; i < key_length; i++ {
@@ -31,22 +34,43 @@ func search_for_item(key_length int, value_length int, amount_operations int) fl
 			for value_index := 0; value_index < value_length; value_index++ {
 				if slice_value[value_index] == current_key {
 					sum++
-					break
 				}
 			}
 		}
 
 		time_total += time.Now().Sub(time0)
 	}
-	return float64(time_total) / float64(amount_operations)
+
+	time_average = float64(time_total) / float64(amount_operations)
+
+	return
 }
 
 func main() {
+	var (
+		amount_duplicates   int
+		time_for_search     float64
+		i                   int = 0
+		amount_arrays_timer int
+	)
+
 	for mult := 1; mult < 300; mult++ {
 		var keys, values, sample_size = 11 * mult, 10 * mult, 100
-		var time_per_search = search_for_item(keys, values, sample_size)
+		time_per_search, sum := find_duplicates(keys, values, sample_size)
 
 		fmt.Printf("%d %f\n", values, time_per_search)
 
+		amount_duplicates += sum
+
+		if i == 0 {
+			time_for_search += float64(time_per_search) * float64(sample_size)
+			if time_for_search >= 60000000000 {
+				amount_arrays_timer = values
+			}
+			i = 1
+		}
+		fmt.Printf("%d %d", amount_duplicates, amount_arrays_timer)
+
 	}
+
 }
