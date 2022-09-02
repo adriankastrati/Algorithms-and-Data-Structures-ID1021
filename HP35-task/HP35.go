@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
 
 type itemType int
 
@@ -10,6 +14,8 @@ const (
 	DIV
 	MUL
 	VALUE
+	MOD
+	MULS
 )
 
 type item struct {
@@ -59,10 +65,24 @@ func (calc *calculator) step() {
 	case DIV:
 		x := calc.stack.pop()
 		y := calc.stack.pop()
+		if x == 0 {
+			x = 1
+		}
 		calc.stack.push(y / x)
 
 	case VALUE:
 		calc.stack.push(item.itemValue)
+
+	case MOD:
+		x := calc.stack.pop()
+		y := calc.stack.pop()
+		calc.stack.push(x % y)
+
+	case MULS:
+		x := calc.stack.pop()
+		y := calc.stack.pop()
+
+		calc.stack.push(x + y - 10 + 1)
 	}
 
 	calc.expressionPointer++
@@ -92,7 +112,7 @@ func (stack *stack) pop() (popvalue int) {
 	if len(stack.stack) >= 10 && stack.stackDyn && (stack.stackPointer <= (len(stack.stack)/3)*2) {
 		stack.copyMinimizeStack()
 		stack.stackSize = len(stack.stack)
-		fmt.Printf("\nDecreased stack size: %d\n", len(stack.stack))
+		//fmt.Printf("\nDecreased stack size: %d\n", len(stack.stack))
 	}
 
 	stack.stackPointer--
@@ -135,7 +155,7 @@ func (stack *stack) push(value int) {
 		if stack.stackDyn {
 			stack.copyExpandStack()
 			stack.stackSize = len(stack.stack)
-			fmt.Printf("\nIncreased stack size: %d\n", len(stack.stack))
+			//fmt.Printf("\nIncreased stack size: %d\n", len(stack.stack))
 
 		} else {
 			panic("pushed full stack")
@@ -148,18 +168,46 @@ func (stack *stack) push(value int) {
 }
 
 func (c *calculator) run() int {
+	time0 := time.Now()
+
 	for c.expressionPointer < len(c.expressionSlice) {
 		c.step()
 	}
+
+	fmt.Printf("%f", float64(time.Since(time0)))
+
 	return c.stack.pop()
 }
 
+func generateItemOperation(amountOperation int) []item {
+	itemList := make([]item, amountOperation*2-1)
+	var op itemType = 0
+	rand.Seed(time.Now().UnixNano())
+
+	for i := 0; i < amountOperation; i++ {
+		itemList[i] = makeItem(VALUE, rand.Intn(1000000)+1)
+	}
+	rand.Seed(time.Now().UnixNano())
+
+	for i := amountOperation; i < amountOperation*2-1; i++ {
+		op = itemType(rand.Intn(5))
+
+		if op == 5 {
+			op = 0
+		}
+		itemList[i] = makeItem(op, 0)
+		op++
+	}
+
+	return itemList
+}
+
 func main() {
-	item1 := makeItem(VALUE, 10)
+	/*item1 := makeItem(VALUE, 10)
 	item2 := makeItem(VALUE, 5)
-	item3 := makeItem(DIV, 0)
+	item3 := makeItem(VALUE, 2)
 	item4 := makeItem(VALUE, 4)
-	item5 := makeItem(ADD, 5)
+	item5 := makeItem(VALUE, 5)
 	item6 := makeItem(VALUE, 10)
 	item7 := makeItem(VALUE, 10)
 	item8 := makeItem(VALUE, 10)
@@ -170,10 +218,52 @@ func main() {
 	item13 := makeItem(ADD, 10)
 
 	itemSlice := []item{item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13}
+	*/
+	amount := 1000000
+
+	itemSlicePref := generateItemOperation(amount)
 
 	stack1 := makeStack(true, 4)
+	fmt.Printf("\n\nDynamic\nTime:")
+	calc1 := makeCalculator(itemSlicePref, &stack1)
+	fmt.Printf("\nInput equals: %d \n", calc1.run())
 
-	calc1 := makeCalculator(itemSlice, &stack1)
+	stack2 := makeStack(false, amount)
+	fmt.Printf("\n\nStatic\nTime:")
+	calc2 := makeCalculator(itemSlicePref, &stack2)
+	fmt.Printf("\nInput equals: %d \n", calc2.run())
 
-	fmt.Printf("Input equals: %d \n", calc1.run())
+	/*
+		sliceDigit = make([]item, 16)
+
+		dig1 := makeItem(VALUE, 0)
+		dig2 := makeItem(VALUE, 0)
+		dig3 := makeItem(VALUE, 0)
+		dig4 := makeItem(VALUE, 1)
+		dig5 := makeItem(VALUE, 1)
+		dig6 := makeItem(VALUE, 5)
+		dig7 := makeItem(VALUE, 3)
+		dig8 := makeItem(VALUE, 7)
+		dig9 := makeItem(VALUE, 1)
+
+
+		mul1 := makeItem(VALUE, 2)
+		mul2 := makeItem(VALUE, 1)
+		mul3 := makeItem(VALUE, 2)
+		mul4 := makeItem(VALUE, 1)
+		mul5 := makeItem(VALUE, 2)
+		mul6 := makeItem(VALUE, 1)
+		mul7 := makeItem(VALUE, 2)
+		mul8 := makeItem(VALUE, 1)
+		mul9 := makeItem(VALUE, 2)
+
+		op1 := makeItem(MUL, 2)
+		op2 := makeItem(MUL, 1)
+		op3 := makeItem(MUL, 2)
+		op4 := makeItem(MUL, 1)
+		op5 := makeItem(MUL, 2)
+		op6 := makeItem(MUL, 1)
+		op7 := makeItem(MUL, 2)
+		op8 := makeItem(MUL, 1)
+		op9 := makeItem(MUL, 2)*/
 }
