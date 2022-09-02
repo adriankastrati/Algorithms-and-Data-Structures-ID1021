@@ -89,30 +89,40 @@ func (stack *stack) pop() (popvalue int) {
 		panic("popped empty stack")
 	}
 
-	if stack.stackDyn && (stack.stackPointer <= len(stack.stack)/3) {
-		stack.stack = stack.copyMinimizeStack()
+	if len(stack.stack) >= 10 && stack.stackDyn && (stack.stackPointer <= (len(stack.stack)/3)*2) {
+		stack.copyMinimizeStack()
 		stack.stackSize = len(stack.stack)
+		fmt.Printf("\nDecreased stack size: %d\n", len(stack.stack))
 	}
 
 	stack.stackPointer--
 	popvalue = stack.stack[stack.stackPointer]
 	return
-
 }
 
-func (stack *stack) copyMinimizeStack() []int {
+/*
+	func (stack *stack) copyMinimizeStack() []int {
+		oldStack := stack.stack
+		newStackSize := (len(oldStack) / 3) * 2
+
+		stack.stack = make([]int, newStackSize)
+		copy(stack.stack, oldStack)
+
+		return stack.stack
+	}
+*/
+func (stack *stack) copyMinimizeStack() {
 	oldStack := stack.stack
-	newStackSize := len(oldStack) / 3
+	stack.stack = make([]int, (len(oldStack)/3)*2)
 
-	stack.stack = make([]int, newStackSize)
-	copy(stack.stack, oldStack)
-
-	return stack.stack
+	for i := 0; i < stack.stackPointer; i++ {
+		stack.stack[i] = oldStack[i]
+	}
 }
 
 func (stack *stack) copyExpandStack() {
 	oldStack := stack.stack
-	stack.stack = make([]int, stack.stackSize*2)
+	stack.stack = make([]int, stack.stackSize*4/3)
 
 	for i := 0; i < stack.stackPointer; i++ {
 		stack.stack[i] = oldStack[i]
@@ -125,7 +135,7 @@ func (stack *stack) push(value int) {
 		if stack.stackDyn {
 			stack.copyExpandStack()
 			stack.stackSize = len(stack.stack)
-			fmt.Printf("%d\n", stack.stackSize)
+			fmt.Printf("\nIncreased stack size: %d\n", len(stack.stack))
 
 		} else {
 			panic("pushed full stack")
@@ -165,6 +175,5 @@ func main() {
 
 	calc1 := makeCalculator(itemSlice, &stack1)
 
-	fmt.Printf("%d \n", calc1.run())
-	fmt.Printf("%d", calc1.stack.stackSize)
+	fmt.Printf("Input equals: %d \n", calc1.run())
 }
