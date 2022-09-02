@@ -59,7 +59,7 @@ func (calc *calculator) step() {
 	case DIV:
 		x := calc.stack.pop()
 		y := calc.stack.pop()
-		calc.stack.push(x / y)
+		calc.stack.push(y / x)
 
 	case VALUE:
 		calc.stack.push(item.itemValue)
@@ -78,34 +78,63 @@ type stack struct {
 
 func makeStack(dynamicOn bool, stackSize int) (stack stack) {
 	stack.stackSize = stackSize
-	if stack.stackDyn == dynamicOn {
-		stack.stackDyn = true
-	}
-
+	stack.stackDyn = dynamicOn
 	stack.stackPointer = 0
 	stack.stack = make([]int, stackSize)
 	return
 }
 
 func (stack *stack) pop() (popvalue int) {
-
 	if stack.stackPointer == 0 {
 		panic("popped empty stack")
+	}
+
+	if stack.stackDyn && (stack.stackPointer <= len(stack.stack)/3) {
+		stack.stack = stack.copyMinimizeStack()
+		stack.stackSize = len(stack.stack)
 	}
 
 	stack.stackPointer--
 	popvalue = stack.stack[stack.stackPointer]
 	return
+
+}
+
+func (stack *stack) copyMinimizeStack() []int {
+	oldStack := stack.stack
+	newStackSize := len(oldStack) / 3
+
+	stack.stack = make([]int, newStackSize)
+	copy(stack.stack, oldStack)
+
+	return stack.stack
+}
+
+func (stack *stack) copyExpandStack() {
+	oldStack := stack.stack
+	stack.stack = make([]int, stack.stackSize*2)
+
+	for i := 0; i < stack.stackPointer; i++ {
+		stack.stack[i] = oldStack[i]
+	}
 }
 
 func (stack *stack) push(value int) {
 
 	if stack.stackPointer >= stack.stackSize {
-		panic("pushed full stack")
+		if stack.stackDyn {
+			stack.copyExpandStack()
+			stack.stackSize = len(stack.stack)
+			fmt.Printf("%d\n", stack.stackSize)
+
+		} else {
+			panic("pushed full stack")
+		}
 	}
 
 	stack.stack[stack.stackPointer] = value
 	stack.stackPointer++
+
 }
 
 func (c *calculator) run() int {
@@ -116,17 +145,26 @@ func (c *calculator) run() int {
 }
 
 func main() {
-	item1 := makeItem(VALUE, 5)
-	item2 := makeItem(VALUE, 10)
+	item1 := makeItem(VALUE, 10)
+	item2 := makeItem(VALUE, 5)
 	item3 := makeItem(DIV, 0)
 	item4 := makeItem(VALUE, 4)
 	item5 := makeItem(ADD, 5)
+	item6 := makeItem(VALUE, 10)
+	item7 := makeItem(VALUE, 10)
+	item8 := makeItem(VALUE, 10)
+	item9 := makeItem(VALUE, 10)
+	item10 := makeItem(ADD, 10)
+	item11 := makeItem(ADD, 10)
+	item12 := makeItem(ADD, 10)
+	item13 := makeItem(ADD, 10)
 
-	itemSlice := []item{item1, item2, item3, item4, item5}
+	itemSlice := []item{item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13}
 
-	stack1 := makeStack(false, 4)
+	stack1 := makeStack(true, 4)
 
 	calc1 := makeCalculator(itemSlice, &stack1)
 
-	fmt.Printf("%d", calc1.run())
+	fmt.Printf("%d \n", calc1.run())
+	fmt.Printf("%d", calc1.stack.stackSize)
 }
