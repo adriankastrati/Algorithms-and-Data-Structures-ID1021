@@ -40,7 +40,7 @@ func main() {
 
 	}
 
-	fmt.Printf("\n\nBinary average: %f\nSorted average: %f\n Unsorted: %f", bin/float64(loopsize), sort/float64(loopsize), unsort/float64(loopsize))
+	fmt.Printf("\n\nBinary average: %f\nSorted average: %f\nUnsorted: %f", bin/float64(loopsize), sort/float64(loopsize), unsort/float64(loopsize))
 
 }
 
