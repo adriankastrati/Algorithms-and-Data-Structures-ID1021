@@ -2,78 +2,49 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"time"
 	"unsorted-array/sorted"
-	"unsorted-array/unsorted"
 )
 
 func main() {
 	var (
-		bin    float64 = 0
-		sort   float64 = 0
-		unsort float64 = 0
+		valueslice []int
+		sliceSize  int
+		//keySlice    []int
+		averageTime float64
+		key         int
+		t0          time.Time
+		min         float64
 	)
 
-	sliceSize := 32000000
-	slice := sorted.Sorted(sliceSize)
-	key := slice[rand.Intn(sliceSize)]
+	sliceSize = 5
+	for mult := 1; sliceSize < 64000000; mult++ {
+		averageTime = 0
+		min = math.MaxFloat64
 
-	loopsize := 320
+		for i := 0; i < 100; i++ {
+			sliceSize = int(math.Pow(2, float64(mult)))
 
-	for i := 0; i < loopsize; i++ {
-		fmt.Printf("%d\n", i)
-		t0 := time.Now()
-		if sorted.Binary_search(slice, key) {
-			bin += float64(time.Since(t0))
+			valueslice = sorted.GenerateSortedList(sliceSize)
+
+			//keySlice = sorted.GenerateSortedList(sliceSize)
+
+			key = rand.Intn(sliceSize * 5)
+
+			t0 = time.Now()
+
+			if sorted.Binary_search(valueslice, key) {
+				averageTime = float64(time.Since(t0))
+			}
+
+			if averageTime < min {
+				min = averageTime
+			}
 		}
-
-		t0 = time.Now()
-		if sorted.Search_sorted(slice, key) {
-			sort += float64(time.Since(t0))
-		}
-
-		t0 = time.Now()
-		if unsorted.Search_unsorted(slice, key) {
-			unsort += float64(time.Since(t0))
-		}
+		fmt.Printf("%d %f\n", sliceSize, averageTime)
 
 	}
 
-	fmt.Printf("\n\nBinary average: %f\nSorted average: %f\nUnsorted: %f", bin/float64(loopsize), sort/float64(loopsize), unsort/float64(loopsize))
-
 }
-
-/*
-func main() {
-	sliceSize := 32000000
-	slice := sorted.Sorted(sliceSize)
-	key := slice[rand.Intn(sliceSize)]
-	for i := 0; i < 32000000; i++ {
-
-		for i := 0; i < sliceSize; i++ {
-
-			fmt.Printf("Binary:")
-			t0 := time.Now()
-			if sorted.Binary_search(slice, key) {
-				fmt.Printf("%f \n", float64(time.Since(t0)))
-			}
-
-			fmt.Printf("Sorted: ")
-			t0 = time.Now()
-			for i := 0; i < len(slice); i++ {
-				if slice[i] == key {
-					fmt.Printf("time: %f\n", float64(time.Since(t0)))
-				}
-			}
-
-			fmt.Printf("Un-sorted: ")
-			t0 = time.Now()
-			if unsorted.Search_unsorted(slice, key) {
-				fmt.Printf("time: %f", float64(time.Since(t0)))
-			}
-		}
-	}
-
-}
-*/

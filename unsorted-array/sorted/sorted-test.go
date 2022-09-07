@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func Search_sorted(slice []int, key int) bool {
+func SearchSortedList(slice []int, key int) bool {
 	for i := 0; i < len(slice); i++ {
 		if slice[i] == key {
 			return true
@@ -14,7 +14,7 @@ func Search_sorted(slice []int, key int) bool {
 	return false
 }
 
-func Sorted(sliceSize int) []int {
+func GenerateSortedList(sliceSize int) []int {
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	slice := make([]int, sliceSize)
