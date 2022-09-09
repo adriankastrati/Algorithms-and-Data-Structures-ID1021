@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"time"
 )
 
-func find_duplicates(key_length int, value_length int, amount_operations int) (time_average float64, sum int) {
+func Find_duplicates(key_length int, value_length int, amount_operations int) (time_average float64, sum int) {
 	var (
 		time_total  time.Duration
 		slice_key   = make([]int, key_length)
@@ -52,13 +53,14 @@ func main() {
 		time_for_search     float64
 		i                   int = 0
 		amount_arrays_timer int
+		sliceSize           int
 	)
 
 	for mult := 1; mult < 300; mult++ {
-		var keys, values, sample_size = 11 * mult, 10 * mult, 100
-		time_per_search, sum := find_duplicates(keys, values, sample_size)
+		var sample_size = 100
+		sliceSize = int(math.Pow(2, float64(mult)))
 
-		fmt.Printf("%d %f\n", values, time_per_search)
+		time_per_search, sum := Find_duplicates(sliceSize*5, sliceSize, sample_size)
 
 		amount_duplicates += sum
 
