@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"sorting-arrays/sort"
 	"time"
@@ -24,11 +25,26 @@ func MakeSlice(sliceSize int) []int {
 }
 
 func main() {
+	var (
+		sliceSize    int
+		tAverage     float64
+		maxSliceSize int = 64000
+	)
 
-	slice := MakeSlice(6)
+	for mult := 2; sliceSize < maxSliceSize; mult++ {
 
-	fmt.Println(slice)
+		tAverage = 0
+		for i := 0; i < 100; i++ {
+			sliceSize = int(math.Pow(2, float64(mult)))
+			slice := MakeSlice(sliceSize)
 
-	slice = sort.MergeSort(slice)
+			t0 := time.Now()
 
+			sort.MergeSort(slice)
+
+			tAverage += float64(time.Since(t0) / 100)
+		}
+
+		fmt.Printf("%d %f\n", sliceSize, tAverage/1000)
+	}
 }

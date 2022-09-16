@@ -1,8 +1,6 @@
 package sort
 
-import "fmt"
-
-func SectionSort(ptrSort *[]int) {
+func SelectionSort(ptrSort *[]int) {
 	var (
 		currMinIndex int
 	)
@@ -20,7 +18,7 @@ func SectionSort(ptrSort *[]int) {
 	}
 }
 
-func TwistSort(ptrSort *[]int) {
+func BubbleSort(ptrSort *[]int) {
 	toSort := *ptrSort
 
 	for i := 0; i < len(toSort); i++ {
@@ -58,8 +56,6 @@ func merge(aSlice []int, bSlice []int) []int {
 		mergedIndex int = 0
 	)
 
-	fmt.Println(aSlice, bSlice)
-
 	mergedSlice := make([]int, len(bSlice)+len(aSlice))
 
 	for ; len(aSlice) > aSliceIndex && len(bSlice) > bSliceIndex; mergedIndex++ {
@@ -68,7 +64,6 @@ func merge(aSlice []int, bSlice []int) []int {
 			mergedSlice[mergedIndex] = bSlice[bSliceIndex]
 
 			bSliceIndex++
-
 			continue
 		}
 		if aSlice[aSliceIndex] < bSlice[bSliceIndex] {
