@@ -1,6 +1,6 @@
 package list
 
-func appendSlices(sliceA []int, sliceB []int) []int {
+func AppendSlices(sliceA []int, sliceB []int) []int {
 	fullSlice := make([]int, len(sliceA)+len(sliceB))
 
 	sliceIndex := 0
