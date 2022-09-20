@@ -8,11 +8,11 @@ import (
 )
 
 var (
-	loops   int = 100
+	loops   int = 1000
 	maxSize int = 64000000
 )
 
-func Task1() {
+func TimeListAOnB() {
 	var (
 		listASize int = 0
 		listBSize int = 1000
@@ -55,7 +55,7 @@ func Task1() {
 
 }
 
-func Task2() {
+func TimeListBOnA() {
 	var (
 		listASize int = 0
 		listBSize int = 1000
@@ -98,7 +98,7 @@ func Task2() {
 
 }
 
-func Task3() {
+func TimeSliceBOnA() {
 	var (
 		sliceB    []int
 		sliceA    []int
@@ -115,7 +115,7 @@ func Task3() {
 	for mult := 5; sliceSize < maxSize; mult++ {
 		tDelta = 0
 
-		for i := 0; i < 100; i++ {
+		for i := 0; i < loops; i++ {
 			sliceSize = int(math.Pow(2, float64(mult)))
 			sliceA = make([]int, sliceSize)
 
@@ -136,4 +136,67 @@ func Task3() {
 		fmt.Printf("%d %f\n", sliceSize, tDelta/1000)
 
 	}
+}
+
+func TimeAllocateSlice(maxSize int) {
+	var (
+		slice     []int
+		sliceSize int = 1
+		tDelta    float64
+		t0        time.Time
+	)
+
+	for mult := 5; sliceSize < maxSize; mult++ {
+		tDelta = 0
+
+		for i := 0; i < loops; i++ {
+			t0 = time.Now()
+
+			sliceSize = int(math.Pow(2, float64(mult)))
+			slice = make([]int, sliceSize)
+
+			tDelta += float64(time.Since(t0))
+		}
+
+		tDelta /= float64(loops)
+
+		fmt.Printf("%d %f\n", sliceSize, tDelta/1000)
+
+	}
+	slice[0] = 1
+}
+
+func TimeAllocateList(maxSize int) {
+	var (
+		tDelta   float64
+		t0       time.Time
+		listSize int
+	)
+
+	//list A appends to list B, list A is fixed while list B increases in size
+
+	//increase length of linked list
+	for mult := 0; listSize < maxSize; mult++ {
+		//restart time delta every iteration of loop
+		tDelta = 0
+
+		//size of list
+		listSize = int(math.Pow(2, float64(mult)))
+
+		for i := 0; i < loops; i++ {
+			//append nodes to linked list through appendation
+			t0 = time.Now()
+
+			listA := list.MakeLinkedList()
+			for k := 0; k < listSize; k++ {
+				listA.AppendNode(k)
+			}
+
+			tDelta += float64(time.Since(t0))
+		}
+
+		tDelta /= float64(loops)
+		fmt.Printf("%d %f\n", listSize, tDelta/1000)
+	}
+
 }

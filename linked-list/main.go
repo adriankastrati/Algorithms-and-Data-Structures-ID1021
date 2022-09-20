@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	task.Task2()
+	task.TimeAllocateList(64000000)
 }
