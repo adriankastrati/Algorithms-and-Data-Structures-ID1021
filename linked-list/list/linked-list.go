@@ -21,12 +21,6 @@ func MakeNode(val int) node {
 
 func MakeLinkedList() linkedList {
 	list := linkedList{}
-
-	/*
-		node := node{}
-		node.Val = headVal
-		list.headNode = &node
-	*/
 	return list
 }
 
@@ -52,7 +46,7 @@ func (l *linkedList) AppendNode(val int) {
 	iteratorNode.Tail = &n
 }
 
-func (l *linkedList) AppendList(ToLink *linkedList) {
+func (l *linkedList) AppendList(toLink linkedList) {
 
 	iteratorNode := l.headNode
 
@@ -60,5 +54,5 @@ func (l *linkedList) AppendList(ToLink *linkedList) {
 		iteratorNode = iteratorNode.Tail
 	}
 
-	iteratorNode.Tail = ToLink.headNode
+	iteratorNode.Tail = toLink.headNode
 }
