@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	loops   int = 1000
-	maxSize int = 64000000
+	loops   int = 250
+	maxSize int = 20000
 )
 
 func TimeListAOnB() {
@@ -23,7 +23,7 @@ func TimeListAOnB() {
 	//list A appends to list B, list A should vary in size while list B is fixed
 
 	//increase length of linked list
-	for mult := 0; listASize < 64000000; mult++ {
+	for mult := 0; listASize < maxSize; mult++ {
 		//restart time delta every iteration of loop
 
 		tDelta = 0
@@ -45,7 +45,7 @@ func TimeListAOnB() {
 			}
 
 			t0 = time.Now()
-			listB.AppendList(listA)
+			listB.AppendList(&listA)
 			tDelta += float64(time.Since(t0))
 		}
 
@@ -66,7 +66,7 @@ func TimeListBOnA() {
 	//list A appends to list B, list A is fixed while list B increases in size
 
 	//increase length of linked list
-	for mult := 0; listASize < 64000000; mult++ {
+	for mult := 0; listASize < maxSize; mult++ {
 		//restart time delta every iteration of loop
 
 		tDelta = 0
@@ -88,7 +88,7 @@ func TimeListBOnA() {
 			}
 
 			t0 = time.Now()
-			listA.AppendList(listB)
+			listA.AppendList(&listB)
 			tDelta += float64(time.Since(t0))
 		}
 
@@ -138,7 +138,7 @@ func TimeSliceBOnA() {
 	}
 }
 
-func TimeAllocateSlice(maxSize int) {
+func TimeAllocateSlice() {
 	var (
 		slice     []int
 		sliceSize int = 1
@@ -166,7 +166,7 @@ func TimeAllocateSlice(maxSize int) {
 	slice[0] = 1
 }
 
-func TimeAllocateList(maxSize int) {
+func TimeAllocateList() {
 	var (
 		tDelta   float64
 		t0       time.Time
@@ -199,4 +199,25 @@ func TimeAllocateList(maxSize int) {
 		fmt.Printf("%d %f\n", listSize, tDelta/1000)
 	}
 
+}
+
+func LinkedStack() {
+	stack := list.MakeStack()
+
+	el1 := list.MakeElement(5)
+	el2 := list.MakeElement(6)
+
+	stack.Push(el1)
+
+	println(stack.Top.GetVal())
+
+	stack.Push(el2)
+
+	println(stack.Top.GetVal())
+
+	println(stack.Top.Under.GetVal())
+
+	n := stack.Pop()
+	println(n.GetVal())
+	println(stack.Top.GetVal())
 }
