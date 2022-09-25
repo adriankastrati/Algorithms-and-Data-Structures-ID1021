@@ -1,4 +1,4 @@
-package HP
+package HP35linked
 
 import (
 	"fmt"

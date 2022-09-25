@@ -1,4 +1,4 @@
-package list
+package linkedList
 
 type element struct {
 	Under *element

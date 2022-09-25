@@ -1,4 +1,4 @@
-package list
+package linkedList
 
 type node struct {
 	Tail *node

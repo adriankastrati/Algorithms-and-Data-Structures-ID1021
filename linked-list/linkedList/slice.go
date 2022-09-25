@@ -1,4 +1,4 @@
-package list
+package linkedList
 
 func AppendSlices(sliceA []int, sliceB []int) []int {
 	fullSlice := make([]int, len(sliceA)+len(sliceB))

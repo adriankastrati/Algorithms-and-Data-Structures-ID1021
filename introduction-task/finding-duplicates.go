@@ -1,4 +1,4 @@
-package main
+package introduction
 
 import (
 	"fmt"
@@ -67,7 +67,7 @@ func main() {
 		if i == 0 {
 			time_for_search += float64(time_per_search) * float64(sample_size)
 			if time_for_search >= 60000000000 {
-				amount_arrays_timer = values
+
 			}
 			i = 1
 		}

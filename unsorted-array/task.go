@@ -1,12 +1,12 @@
-package main
+package Task
 
 import (
+	"algo/unsorted-array/sorted"
 	"fmt"
 	"math"
-	"unsorted-array/sorted"
 )
 
-func main() {
+func Task() {
 	var (
 		valueslice  []int
 		sliceSize   int

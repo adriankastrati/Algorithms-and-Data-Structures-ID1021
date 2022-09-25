@@ -1,10 +1,10 @@
-package main
+package task
 
 import (
+	"algo/sorting-arrays/sort"
 	"fmt"
 	"math"
 	"math/rand"
-	"sorting-arrays/sort"
 	"time"
 )
 
@@ -24,7 +24,7 @@ func MakeSlice(sliceSize int) []int {
 	return shuffled
 }
 
-func main() {
+func Task() {
 	var (
 		sliceSize    int
 		tAverage     float64

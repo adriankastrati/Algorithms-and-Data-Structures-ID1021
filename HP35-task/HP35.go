@@ -1,4 +1,4 @@
-package main
+package HP35
 
 import (
 	"fmt"
@@ -202,7 +202,7 @@ func generateItemOperation(amountOperation int) []item {
 	return itemList
 }
 
-func main() {
+func Task() {
 	/*item1 := makeItem(VALUE, 10)
 	item2 := makeItem(VALUE, 5)
 	item3 := makeItem(VALUE, 2)

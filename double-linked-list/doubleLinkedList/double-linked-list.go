@@ -1,4 +1,4 @@
-package list
+package doubleLinkedList
 
 import "math/rand"
 
