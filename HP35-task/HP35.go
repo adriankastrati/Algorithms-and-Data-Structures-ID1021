@@ -182,12 +182,12 @@ func (c *calculator) run() int {
 func generateItemOperation(amountOperation int) []item {
 	itemList := make([]item, amountOperation*2-1)
 	var op itemType = 0
-	rand.Seed(time.Now().UnixNano())
+	//	rand.Seed(time.Now().UnixNano())
 
 	for i := 0; i < amountOperation; i++ {
 		itemList[i] = makeItem(VALUE, rand.Intn(1000000)+1)
 	}
-	rand.Seed(time.Now().UnixNano())
+	//	rand.Seed(time.Now().UnixNano())
 
 	for i := amountOperation; i < amountOperation*2-1; i++ {
 		op = itemType(rand.Intn(5))
@@ -227,12 +227,12 @@ func main() {
 	fmt.Printf("\n\nDynamic\nTime:")
 	calc1 := makeCalculator(itemSlicePref, &stack1)
 	fmt.Printf("\nInput equals: %d \n", calc1.run())
-
-	stack2 := makeStack(false, amount)
-	fmt.Printf("\n\nStatic\nTime:")
-	calc2 := makeCalculator(itemSlicePref, &stack2)
-	fmt.Printf("\nInput equals: %d \n", calc2.run())
-
+	/*
+		stack2 := makeStack(false, amount)
+		fmt.Printf("\n\nStatic\nTime:")
+		calc2 := makeCalculator(itemSlicePref, &stack2)
+		fmt.Printf("\nInput equals: %d \n", calc2.run())
+	*/
 	/*
 		sliceDigit = make([]item, 16)
 

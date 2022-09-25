@@ -1,21 +1,21 @@
-package list
+package HP
 
 type element struct {
 	Under *element
-	val   int
+	item  item
 }
 
-func (e *element) GetVal() int {
-	return e.val
+func (e *element) GetVal() item {
+	return e.item
 }
 
 type stack struct {
 	Top *element
 }
 
-func MakeElement(val int) element {
+func MakeElement(val item) element {
 	el := element{}
-	el.val = val
+	el.item = val
 	return el
 }
 

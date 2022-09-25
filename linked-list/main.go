@@ -1,9 +1,20 @@
 package main
 
-import (
-	"linked-list/task"
-)
+import "linked-list/task"
 
 func main() {
-	task.TimeAllocateList(64000000)
+
+	// task.TimeAllocateList()
+
+	// println()
+	// task.TimeAllocateSlice()
+
+	// println()
+	task.TimeListAOnB()
+
+	// println()
+	// task.TimeListBOnA()
+
+	// println()
+	// task.TimeSliceBOnA()
 }

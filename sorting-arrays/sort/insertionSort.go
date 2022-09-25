@@ -1,6 +1,6 @@
 package sort
 
-func BubbleSort(ptrSort *[]int) {
+func InsertionSort(ptrSort *[]int) {
 	toSort := *ptrSort
 
 	for i := 0; i < len(toSort); i++ {

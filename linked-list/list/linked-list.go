@@ -5,11 +5,11 @@ type node struct {
 	Val  int
 }
 
-type linkedList struct {
+type LinkedList struct {
 	headNode *node
 }
 
-func (l *linkedList) GetHeadNode() *node {
+func (l *LinkedList) GetHeadNode() *node {
 	return l.headNode
 }
 
@@ -19,8 +19,8 @@ func MakeNode(val int) node {
 	return n
 }
 
-func MakeLinkedList() linkedList {
-	list := linkedList{}
+func MakeLinkedList() LinkedList {
+	list := LinkedList{}
 	return list
 }
 
@@ -28,7 +28,7 @@ func (n node) Next() *node {
 	return n.Tail
 }
 
-func (l *linkedList) AppendNode(val int) {
+func (l *LinkedList) AppendNode(val int) {
 	n := node{}
 	n.Val = val
 
@@ -46,7 +46,7 @@ func (l *linkedList) AppendNode(val int) {
 	iteratorNode.Tail = &n
 }
 
-func (l *linkedList) AppendList(toLink linkedList) {
+func (l *LinkedList) AppendList(toLink LinkedList) {
 
 	iteratorNode := l.headNode
 

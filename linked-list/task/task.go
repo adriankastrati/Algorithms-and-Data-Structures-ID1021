@@ -2,55 +2,57 @@ package task
 
 import (
 	"fmt"
+	HP "linked-list/hp35"
 	"linked-list/list"
 	"math"
 	"time"
 )
 
 var (
-	loops   int = 250
-	maxSize int = 20000
+	loops   int = 100000
+	maxSize int = 32000
 )
 
 func TimeListAOnB() {
 	var (
-		listASize int = 0
-		listBSize int = 1000
+		listASize int
+		listA     list.LinkedList
+		listB     list.LinkedList
 		tDelta    float64
-		t0        time.Time
 	)
 
-	//list A appends to list B, list A should vary in size while list B is fixed
+	listB = list.MakeLinkedList()
+	for i := 0; i < 1000; i++ {
+		listB.AppendNode(i)
+	}
 
-	//increase length of linked list
+	lastB := listB.GetHeadNode()
+	for lastB.Tail != nil {
+		lastB = lastB.Tail
+	}
+
 	for mult := 0; listASize < maxSize; mult++ {
-		//restart time delta every iteration of loop
 
-		tDelta = 0
-		//size of list A
 		listASize = int(math.Pow(2, float64(mult)))
+		tDelta = 0
+
+		listA = list.MakeLinkedList()
+		for i := 0; i < listASize; i++ {
+			listA.AppendNode(i)
+		}
 
 		for i := 0; i < loops; i++ {
 
-			//create inside of loop to minimize the effect on time complexity, should always be the same
-			listB := list.MakeLinkedList()
-			for k := 0; k < listBSize; k++ {
-				listB.AppendNode(k)
-			}
-
-			//append nodes to linked list through appendation
-			listA := list.MakeLinkedList()
-			for k := 0; k < listASize; k++ {
-				listA.AppendNode(k)
-			}
-
-			t0 = time.Now()
-			listB.AppendList(&listA)
+			t0 := time.Now()
+			listB.AppendList(listA)
 			tDelta += float64(time.Since(t0))
+
+			lastB.Tail = nil
 		}
 
 		tDelta /= float64(loops)
 		fmt.Printf("%d %f\n", listASize, tDelta/1000)
+
 	}
 
 }
@@ -88,7 +90,7 @@ func TimeListBOnA() {
 			}
 
 			t0 = time.Now()
-			listA.AppendList(&listB)
+			listA.AppendList(*&listB)
 			tDelta += float64(time.Since(t0))
 		}
 
@@ -172,7 +174,6 @@ func TimeAllocateList() {
 		t0       time.Time
 		listSize int
 	)
-
 	//list A appends to list B, list A is fixed while list B increases in size
 
 	//increase length of linked list
@@ -220,4 +221,20 @@ func LinkedStack() {
 	n := stack.Pop()
 	println(n.GetVal())
 	println(stack.Top.GetVal())
+}
+
+func Stack() {
+	amount := 10000000
+
+	itemSlicePref := HP.GenerateItemOperation(amount)
+
+	stack1 := HP.MakeStack()
+	fmt.Printf("\n\nDynamic\nTime:")
+	calc1 := HP.MakeCalculator(itemSlicePref, &stack1)
+	fmt.Printf("\nInput equals: %d \n", calc1.Run())
+
+	stack2 := HP.MakeStack()
+	fmt.Printf("\n\nStatic\nTime:")
+	calc2 := HP.MakeCalculator(itemSlicePref, &stack2)
+	fmt.Printf("\nInput equals: %d \n", calc2.Run())
 }
