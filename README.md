@@ -6,3 +6,5 @@
 2. HP35
 3. Searching through arrays
 4. Sorting arrays
+5. Linked list
+6. Double linked list
