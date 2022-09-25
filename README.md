@@ -1,5 +1,5 @@
 # Algorithms and Data Structures ID1021
-## Course at KTH, [course site](https://www.kth.se/student/kurser/kurs/ID1021?l=en)
+### Course at KTH, [course site](https://www.kth.se/student/kurser/kurs/ID1021?l=en)
 --- 
 ## The language for the following exercises are written in Go
 1. Arrays  
