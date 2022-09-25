@@ -4,17 +4,17 @@ import "linked-list/task"
 
 func main() {
 
-	// task.TimeAllocateList()
+	task.TimeAllocateList()
 
-	// println()
-	// task.TimeAllocateSlice()
+	println()
+	task.TimeAllocateSlice()
 
-	// println()
+	println()
 	task.TimeListAOnB()
 
-	// println()
-	// task.TimeListBOnA()
+	println()
+	task.TimeListBOnA()
 
-	// println()
-	// task.TimeSliceBOnA()
+	println()
+	task.TimeSliceBOnA()
 }
