@@ -1,6 +1,6 @@
 # Algorithms and Data Structures ID1021
 ## Course at KTH
-```https://www.kth.se/student/kurser/kurs/ID1021```
+Link to [course site] (https://www.kth.se/student/kurser/kurs/ID1021?l=en)
 ---
 ## See folder tasks-pdf for full description of tasks
 ---
