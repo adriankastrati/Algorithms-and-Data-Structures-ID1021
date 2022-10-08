@@ -8,6 +8,10 @@ type linkedList struct {
 	headNode *Node
 }
 
+func MakeLinkedList() linkedList {
+	return linkedList{}
+}
+
 func MakeLinkedListRand(amount int) (l linkedList) {
 	var (
 		newNode Node
@@ -37,6 +41,25 @@ func (l *linkedList) Add(n *Node) {
 
 	n.Tail.Front = n
 	l.headNode = n
+
+}
+
+func (l *linkedList) AddV(v int) {
+	n := Node{}
+	n.Val = v
+
+	if l.headNode == nil {
+		l.headNode = &n
+		return
+	}
+
+	iteratorNode := l.headNode
+
+	for iteratorNode.Tail != nil {
+		iteratorNode = iteratorNode.Tail
+	}
+
+	iteratorNode.Tail = &n
 
 }
 

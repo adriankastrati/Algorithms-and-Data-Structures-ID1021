@@ -1,8 +1,7 @@
 package main
 
-import "algo/binary-tree/task"
+import "algo/queue/task"
 
 func main() {
-	task.TaskBinaryTreeAdd()
-
+	task.SearchTree()
 }
