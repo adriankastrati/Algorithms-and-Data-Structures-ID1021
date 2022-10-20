@@ -1,7 +1,11 @@
 package main
 
-import "algo/queue/task"
+import "algo/hash-tables/task"
 
 func main() {
-	task.SearchTree()
+	// task.TestZipSB()
+	println("slice bucket")
+	task.TestZipSB()
+	println("linked bucket")
+	task.TestZipLB()
 }
