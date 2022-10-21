@@ -1,123 +1,74 @@
 package list
 
-import (
-	"fmt"
-	"math"
-	"math/rand"
-	"time"
-)
-
-type NodeR1 struct {
-	tail *NodeR1
-	prio int
-}
-
 type LinkedListR1 struct {
-	first *NodeR1
+	First *Node
 }
 
-func (l *LinkedListR1) Remove() (retNod *NodeR1) {
-	retNod = l.first
-	l.first = l.first.tail
+func (l *LinkedListR1) Remove() (retPrio int) {
+	retPrio = l.First.Prio
+	l.First = l.First.Tail
 	return
 }
-func MakeNodeR1(prior int) NodeR1 {
-	return NodeR1{prio: prior}
+func MakeNodeR1(Prior int) Node {
+	return Node{Prio: Prior}
 }
 
-func (l *LinkedListR1) Add(n *NodeR1) {
-	if l.first == nil {
-		l.first = n
+func (l *LinkedListR1) Add(pr int) {
+	n := &Node{Tail: nil, Prio: pr}
+	if l.First == nil {
+		l.First = n
 		return
 	}
 
-	nIt := l.first
+	nIt := l.First
 
-	if l.first.tail == nil {
-		if l.first.prio < n.prio {
-			l.first.tail = n
-		} else {
-			n.tail = l.first
-			l.first = n
+	for nIt != nil {
+		if nIt.Prio > pr {
+			n.Tail = nIt
+			nIt.Front.Tail = n
+
 		}
 	}
-
-	for nIt.tail.prio <= n.prio {
-		nIt = nIt.tail
-	}
-
-	n.tail = nIt.tail
-	nIt.tail = n
 }
 
-type NodeA1 struct {
-	tail *NodeA1
-	prio int
+type Node struct {
+	Tail  *Node
+	Front *Node
+	Prio  int
 }
 
 type LinkedListA1 struct {
-	first *NodeA1
+	First *Node
 }
 
-func MakeNodeA1(prior int) NodeA1 {
-	return NodeA1{prio: prior}
+func MakeNode(Prior int) Node {
+	return Node{Prio: Prior}
 }
 
-func (l *LinkedListA1) Add(n *NodeA1) {
-	n.tail = l.first
-	l.first = n
+func (l *LinkedListA1) Add(pri int) {
+	n := &Node{Prio: pri}
+	n.Tail = l.First
+	l.First = n
+	n.Tail.Front = n
 }
 
-func (l *LinkedListA1) Remove() (retNod *NodeA1) {
-	nIt := l.first
-	var front *NodeA1
-	retNod = l.first
+func (l *LinkedListA1) Remove() int {
+	retNod := l.First
+	nIt := l.First
 
-	for ; nIt.tail != nil; nIt = nIt.tail {
-		if nIt.tail.prio < retNod.prio {
-			front = nIt
-			retNod = nIt.tail
+	for nIt != nil {
+		if nIt.Prio < retNod.Prio {
+			retNod = nIt
 		}
+		nIt = nIt.Tail
 	}
 
-	front.tail = retNod.tail
-	return
-}
-
-func BenchListF() {
-	var (
-		tDelta   float64
-		t0       time.Time
-		listSize int
-		maxSize  int = 1000000
-		loops    int = 100
-	)
-	//list A appends to list B, list A is fixed while list B increases in size
-
-	//increase length of linked list
-	for mult := 0; listSize < maxSize; mult++ {
-		//restart time delta every iteration of loop
-
-		tDelta = 0
-
-		//size of list
-		listSize = int(math.Pow(2, float64(mult)))
-
-		valSlice := make([]int, listSize)
-		for i, _ := range valSlice {
-			valSlice[i] = rand.Intn(listSize * 2)
-		}
-
-		for i := 0; i < loops; i++ {
-			//append nodes to linked list through appendation
-			t0 = time.Now()
-
-			tDelta += float64(time.Since(t0))
-		}
-
-		tDelta /= float64(loops)
-		fmt.Printf("%d %f\n", listSize, tDelta/1000)
-
+	if retNod.Tail == nil {
+		retNod.Front.Tail = nil
+	} else if retNod == l.First {
+		l.First = nil
+	} else if retNod.Front == nil {
+		retNod.Front.Tail = retNod.Tail
 	}
-
+	return retNod.Prio
 }

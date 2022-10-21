@@ -25,7 +25,7 @@ func (sH *sliceHeap) getRoot() *node {
 
 func (sH *sliceHeap) Remove() (ret *node) {
 	ret, sH.heap[0] = sH.heap[0], sH.heap[sH.lastIndex]
-
+	sH.lastIndex--
 	sH._sink(0)
 	return
 }

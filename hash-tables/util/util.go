@@ -1,4 +1,4 @@
-package zip
+package util
 
 import (
 	"flag"
@@ -7,7 +7,7 @@ import (
 )
 
 func Hash(key int) int {
-	return key % 5000
+	return key % 10000
 }
 
 func StringToInt(str string) int {
@@ -18,7 +18,7 @@ func StringToInt(str string) int {
 	return code
 }
 
-func controlFileRead(e error) {
+func ControlFileRead(e error) {
 	if e != nil {
 		panic(e)
 	}

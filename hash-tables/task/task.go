@@ -161,15 +161,16 @@ func TestZipSB() {
 	// n2 := zip.NodeSB{AreaCode: 22349, Name: "ESLÖV", Population: 100}
 
 	zSB := zip.MakeFullZipSB("/Users/Adrian/Algorithms-and-Data-Structures-in-Go/hash-tables/data/postnr.csv")
+
 	t0 := time.Now()
-	f1, l1 := zSB.LookUp(10)
+	f1, l1 := zSB.LookUp(12152)
 	t1 := time.Since(t0)
+
 	if f1 {
 		println(l1, " in ", t1, "ns")
 	}
 
 	t0 = time.Now()
-
 	f2, l2 := zSB.LookUp(98499)
 	t1 = time.Since(t0)
 
@@ -182,7 +183,6 @@ func TestZipLB() {
 	lB := zip.MakeFullZipB("/Users/Adrian/Algorithms-and-Data-Structures-in-Go/hash-tables/data/postnr.csv")
 
 	t0 := time.Now()
-
 	f1, l1 := lB.LookUp(12152)
 	t1 := time.Since(t0)
 

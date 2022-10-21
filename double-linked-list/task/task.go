@@ -58,7 +58,6 @@ func Task1() {
 		tDelta /= loop
 		fmt.Printf("%d %f\n", listSize, float64(tDelta)/1000)
 	}
-
 }
 
 func Tas() {

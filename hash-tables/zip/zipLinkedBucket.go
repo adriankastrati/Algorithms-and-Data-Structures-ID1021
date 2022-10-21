@@ -1,6 +1,7 @@
 package zip
 
 import (
+	"algo/hash-tables/util"
 	"encoding/csv"
 	"os"
 )
@@ -21,7 +22,7 @@ type NodeB struct {
 	nextN      *NodeB
 }
 
-func (b *Bucket) addNode(n *NodeB) {
+func (b *Bucket) addNode(n *NodeB) (i int) {
 	b.bucketSize++
 	if b.head == nil {
 		b.head = n
@@ -31,39 +32,43 @@ func (b *Bucket) addNode(n *NodeB) {
 	it := b.head
 	for it.nextN != nil {
 		it = it.nextN
+		i++
 	}
 	it.nextN = n
+	return
 }
 
 func MakeFullZipB(fileName string) ZipB {
 
-	dat := make([]Bucket, 50000)
+	dat := make([]Bucket, 10000)
 
 	f, errOpen := os.Open(fileName)
-	controlFileRead(errOpen)
+	util.ControlFileRead(errOpen)
 
 	defer f.Close()
 
 	csvReader := csv.NewReader(f)
-
+	coll := 0
 	i := 0
 	for ; ; i++ {
 		line, err := csvReader.Read()
 
-		if EOF(err) {
+		if util.EOF(err) {
 			break
 		} else {
-			controlFileRead(err)
+			util.ControlFileRead(err)
 		}
 
 		popu := stringToInt(line[2])
 
 		code := stringToInt(removeWhiteSpace(line[0]))
-		hCode := Hash(code)
+		hCode := util.Hash(code)
 
 		n := NodeB{areaCode: code, name: line[1], population: popu}
-		dat[hCode].addNode(&n)
+		coll += (dat[hCode].addNode(&n))
+
 	}
+	println(coll)
 	max := i - 1
 
 	return ZipB{data: dat, max: max}
@@ -71,7 +76,7 @@ func MakeFullZipB(fileName string) ZipB {
 }
 
 func (z *ZipB) Add(n NodeB) {
-	zCodeHash := Hash(n.areaCode)
+	zCodeHash := util.Hash(n.areaCode)
 	z.data[zCodeHash].addNode(&n)
 }
 
@@ -89,7 +94,7 @@ func (b *Bucket) search(code int) (bool, int) {
 }
 
 func (z *ZipB) LookUp(zCode int) (bool, int) {
-	bucketIndex := Hash(zCode)
+	bucketIndex := util.Hash(zCode)
 	return z.data[bucketIndex].search(zCode)
 
 }

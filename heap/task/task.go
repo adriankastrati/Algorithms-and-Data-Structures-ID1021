@@ -28,18 +28,17 @@ func BenchListA1() {
 		listSize = int(math.Pow(2, float64(mult)))
 		listA1 := list.LinkedListA1{}
 
-		valSlice := make([]*list.NodeA1, listSize)
+		valSlice := make([]int, listSize)
 		for i := 0; i < loops; i++ {
 
-			for i, _ := range valSlice {
-				nodeN := list.MakeNodeA1(rand.Intn(listSize * 2))
-				valSlice[i] = &nodeN
+			for i := range valSlice {
+				valSlice[i] = rand.Intn(listSize * 2)
 			}
 
 			//append nodes to linked list through appendation
 			t0 = time.Now()
-			for j := 0; j < listSize; j++ {
-				listA1.Add(valSlice[j])
+			for _, v := range valSlice {
+				listA1.Add(v)
 			}
 
 			tDelta += float64(time.Since(t0))
@@ -67,7 +66,7 @@ func BenchListR1() {
 		t0       time.Time
 		listSize int
 		maxSize  int = 1000000
-		loops    int = 100
+		loop     int = 100
 	)
 	//list A appends to list B, list A is fixed while list B increases in size
 
@@ -79,37 +78,28 @@ func BenchListR1() {
 
 		//size of list
 		listSize = int(math.Pow(2, float64(mult)))
-		listA1 := list.LinkedListR1{}
+		listR1 := list.LinkedListR1{}
 
-		valSlice := make([]*list.NodeR1, listSize)
-		for i := 0; i < loops; i++ {
+		valSlice := make([]int, listSize)
+		// for i := 0; i < loops; i++ {
+		listR1 = list.LinkedListR1{}
 
-			for i, _ := range valSlice {
-				nodeN := list.MakeNodeR1(rand.Intn(listSize * 2))
-				valSlice[i] = &nodeN
-			}
-
-			//append nodes to linked list through appendation
-			t0 = time.Now()
-			for j := 0; j < listSize; j++ {
-				listA1.Add(valSlice[j])
-			}
-
-			tDelta += float64(time.Since(t0))
+		for i := range valSlice {
+			valSlice[i] = rand.Intn(listSize * 2)
 		}
 
-		tDelta /= float64(loops)
-		fmt.Printf("%d %f   |   ", listSize, tDelta/1000)
-
-		tDelta = 0
+		//append nodes to linked list through appendation
 		t0 = time.Now()
 		for j := 0; j < listSize; j++ {
-			listA1.Remove()
+			listR1.Add(valSlice[j])
 		}
 
 		tDelta += float64(time.Since(t0))
-		fmt.Printf("%d %f", listSize, tDelta/1000)
+		// }
 
+		tDelta = float64(loop)
+
+		fmt.Printf("%d %f", listSize, tDelta/1000)
 	}
 
 }

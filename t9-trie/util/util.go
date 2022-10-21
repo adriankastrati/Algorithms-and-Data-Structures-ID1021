@@ -1,25 +1,4 @@
-package t9
-
-type Node struct {
-	Next []*Node
-	Word bool
-}
-
-type T9 struct {
-	Root []*Node
-}
-
-func (t *T9) Add(word string) {}
-
-func MakeTrie() T9 {
-	r := make([]*Node, 27)
-	return T9{Root: r}
-}
-
-func makeNode() Node {
-	nxt := make([]*Node, 27)
-	return Node{Next: nxt, Word: false}
-}
+package util
 
 func GetCodeByChar(word rune) int {
 	switch word {
@@ -43,8 +22,31 @@ func GetCodeByChar(word rune) int {
 	return returnVal
 }
 
-func GetIndexByKey(key int) int {
-	return key*3 - 3
+func GetIndexByKey(key byte) int {
+	var index int
+
+	switch key {
+	case '1':
+		index = 0
+	case '2':
+		index = 3
+	case '3':
+		index = 6
+	case '4':
+		index = 9
+	case '5':
+		index = 12
+	case '6':
+		index = 15
+	case '7':
+		index = 18
+	case '8':
+		index = 21
+	case '9':
+		index = 24
+	}
+
+	return index
 }
 
 func GetKeyByChar(char rune) int {
@@ -53,12 +55,7 @@ func GetKeyByChar(char rune) int {
 
 }
 
-func (t *T9) Search(keyStroke int) []string {
-
-	return nil
-}
-
-func GetCharByCode(code rune) string {
+func GetCharByCode(code int) string {
 	switch code {
 	case 24:
 		return string('å')
@@ -76,5 +73,5 @@ func GetCharByCode(code rune) string {
 	if unicodeVal <= 113 {
 		unicodeVal--
 	}
-	return string(unicodeVal)
+	return string(rune(unicodeVal))
 }

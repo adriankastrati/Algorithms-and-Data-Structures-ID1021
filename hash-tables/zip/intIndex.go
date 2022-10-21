@@ -1,6 +1,7 @@
 package zip
 
 import (
+	"algo/hash-tables/util"
 	"encoding/csv"
 	"os"
 	"strconv"
@@ -22,7 +23,7 @@ func MakeZipI(fileName string) ZipI {
 	dat := make([]NodeI, 10000)
 
 	f, errOpen := os.Open(fileName)
-	controlFileRead(errOpen)
+	util.ControlFileRead(errOpen)
 
 	defer f.Close()
 
@@ -32,10 +33,10 @@ func MakeZipI(fileName string) ZipI {
 	for ; ; i++ {
 		line, err := csvReader.Read()
 
-		if EOF(err) {
+		if util.EOF(err) {
 			break
 		} else {
-			controlFileRead(err)
+			util.ControlFileRead(err)
 		}
 
 		popu := stringToInt(line[2])

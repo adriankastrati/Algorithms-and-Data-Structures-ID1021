@@ -1,6 +1,7 @@
 package zip
 
 import (
+	"algo/hash-tables/util"
 	"encoding/csv"
 	"os"
 )
@@ -16,18 +17,18 @@ type NodeSB struct {
 	Population int
 }
 
-func (b *ZipSB) AddNode(n NodeSB) {
-	hashIndex := Hash(n.AreaCode)
-	// println("hash :", hashIndex)
+func (b *ZipSB) AddNode(n NodeSB) int {
+	hashIndex := util.Hash(n.AreaCode)
 
-	for i := hashIndex; i < len(b.Data); i++ {
-		// println("i:", i)
-		if b.Data[i] == nil {
-			b.Data[i] = &n
+	for i := 0; i+hashIndex < len(b.Data); i++ {
+		if b.Data[i+hashIndex] == nil {
+			b.Data[i+hashIndex] = &n
 			b.max++
-			break
+			return i
+
 		}
 	}
+	return 0
 }
 
 func MakeZipSB(s int) ZipSB {
@@ -38,11 +39,12 @@ func MakeZipSB(s int) ZipSB {
 
 func MakeFullZipSB(fileName string) ZipSB {
 
-	dat := make([]*NodeSB, 50000)
+	dat := make([]*NodeSB, 13000)
+
 	zB := ZipSB{Data: dat}
 
 	f, errOpen := os.Open(fileName)
-	controlFileRead(errOpen)
+	util.ControlFileRead(errOpen)
 
 	defer f.Close()
 
@@ -52,10 +54,10 @@ func MakeFullZipSB(fileName string) ZipSB {
 	for ; ; i++ {
 		line, err := csvReader.Read()
 
-		if EOF(err) {
+		if util.EOF(err) {
 			break
 		} else {
-			controlFileRead(err)
+			util.ControlFileRead(err)
 		}
 
 		popu := stringToInt(line[2])
@@ -72,17 +74,19 @@ func MakeFullZipSB(fileName string) ZipSB {
 }
 
 func (z *ZipSB) LookUp(zCode int) (bool, int) {
-	zCodeHash := Hash(zCode)
+	zCodeHash := util.Hash(zCode)
+	var found bool
 
-	for i := 0; i <= z.max; i++ {
-		if z.Data[i+zCodeHash] != nil {
-			if z.Data[i+zCodeHash].AreaCode == zCode {
-				// println("i: ", i, " hash: ", zCodeHash)
-				return true, i
-			}
+	i := 0
+	for z.Data[i+zCodeHash] != nil {
+		if z.Data[i+zCodeHash].AreaCode == zCode {
+			found = true
+			break
 		}
+		i++
 	}
-	return false, 0
+
+	return found, i
 
 }
 
@@ -95,23 +99,4 @@ func (z *ZipSB) getZipCode() []int {
 	}
 
 	return sl
-}
-
-func (z *ZipSB) Collisions(mod int) {
-	data := make([]int, mod)
-	cols := make([]int, 10)
-
-	keys := z.getZipCode()
-
-	for i := 0; i < z.max; i++ {
-		index := keys[i] % mod
-		cols[data[index]]++
-		data[index]++
-	}
-
-	println(mod)
-	for i := 0; i < 10; i++ {
-		print("\t", cols[i])
-	}
-	println()
 }
