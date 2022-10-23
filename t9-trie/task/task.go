@@ -6,7 +6,7 @@ import (
 
 func AddWord() {
 	t9 := t9.MakeFullT9("t9-trie/data/kelly.txt")
-	strings := t9.Search("324")
+	strings := t9.Search("161")
 
 	for _, v := range strings {
 		println(v)

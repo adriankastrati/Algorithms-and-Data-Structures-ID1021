@@ -58,17 +58,16 @@ func (n *Node) search(key string, path string) []string {
 			path += util.GetCharByCode(index)
 			possWord = append(possWord, n.Next[index].search(key[1:], path)...)
 			added = true
-
 		}
 
 		if n.Next[index+1] != nil {
 			if added {
 				path = path[:len(path)-1]
 			}
-			added = true
 
-			path += util.GetCharByCode(index)
-			possWord = append(possWord, n.Next[index].search(key[1:], path)...)
+			added = true
+			path += util.GetCharByCode(index + 1)
+			possWord = append(possWord, n.Next[index+1].search(key[1:], path)...)
 
 		}
 		if n.Next[index+2] != nil {
@@ -76,8 +75,8 @@ func (n *Node) search(key string, path string) []string {
 				path = path[:len(path)-1]
 			}
 
-			path += util.GetCharByCode(index)
-			possWord = append(possWord, n.Next[index].search(key[1:], path)...)
+			path += util.GetCharByCode(index + 2)
+			possWord = append(possWord, n.Next[index+2].search(key[1:], path)...)
 
 		}
 	} else {
