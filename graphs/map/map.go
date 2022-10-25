@@ -5,14 +5,15 @@ import (
 	"algo/hash-tables/util"
 	"encoding/csv"
 	"os"
+	"strconv"
 )
 
-type Maps struct {
+type Map struct {
 	Cities []*city.City
 	Mod    int
 }
 
-func (m *Maps) Hash(name string) int {
+func (m *Map) Hash(name string) int {
 	hash := 7
 
 	for _, v := range name {
@@ -21,44 +22,31 @@ func (m *Maps) Hash(name string) int {
 
 	return hash % m.Mod
 }
+func (m *Map) LookUp(name string) *city.City {
+	hashCode := m.Hash(name)
 
-func (m *Maps) LookUp(name string) *city.City {
-	hashIndex := m.Hash(name)
-	i := 0
-	for i = hashIndex; i < len(m.Cities) && m.Cities[i] != nil; i++ {
-		if m.Cities[i].Name == name {
-			return m.Cities[i]
-		}
-	}
-	m.Cities[i] = &city.City{Name: name}
+	for ; hashCode < len(m.Cities); hashCode++ {
 
-	return nil
-}
-
-func (m *Maps) AddCity(c city.City) {
-	hashIndex := m.Hash(c.Name)
-
-	for i := 0; i+hashIndex < len(m.Cities); i++ {
-
-		if m.Cities[i+hashIndex] == nil {
-			m.Cities[i+hashIndex] = &c
+		if m.Cities[hashCode] == nil {
+			c := city.NewCity(name)
+			m.Cities[hashCode] = &c
 			break
 		}
-		if m.Cities[i+hashIndex].Name == c.Name {
-			c := city.Connection{City: c.Neighbors[0].City, Distance: c.Neighbors[0].Distance}
-			m.Cities[i+hashIndex].AddConnection(c)
+
+		if m.Cities[hashCode].Name == name {
 			break
 		}
 	}
 
+	return m.Cities[hashCode]
 }
 
-func NewMapsTrain() Maps {
+func NewMapsTrain(filePath string) Map {
 	mod := 541
 	c := make([]*city.City, mod)
-	maps := Maps{Mod: mod, Cities: c}
+	Map := Map{Mod: mod, Cities: c}
 
-	f, errOpen := os.Open("../data/trains.csv")
+	f, errOpen := os.Open(filePath)
 	util.ControlFileRead(errOpen)
 
 	defer f.Close()
@@ -74,19 +62,14 @@ func NewMapsTrain() Maps {
 			util.ControlFileRead(err)
 		}
 		//use line for data
-		distance := util.StringToInt(line[2])
+		distance, _ := strconv.Atoi(line[2])
 
-		cityA := city.NewCity(line[1])
-		connA := city.Connection{Distance: distance, City: cityA}
+		cityA := Map.LookUp(line[0])
 
-		cityB := city.NewCity(line[0])
-		connB := city.Connection{Distance: distance, City: cityB}
+		cityB := Map.LookUp(line[1])
 
-		cityA.AddConnection(connB)
-		cityB.AddConnection(connA)
+		cityA.Connect(cityB, distance)
 
-		maps.AddCity(cityA)
-		maps.AddCity(cityB)
 	}
-	return maps
+	return Map
 }

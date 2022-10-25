@@ -2,14 +2,14 @@ package list
 
 import "testing"
 
-func TestAdd(t *testing.T) {
-	listA1 := LinkedListA1{}
+// func TestAdd(t *testing.T) {
+// 	listA1 := LinkedListA1{}
 
-	listA1.Add(4)
-	if listA1.First.Prio != 4 {
-		t.Errorf("wrong added, expected: Prio %d, got %d", 4, listA1.First.Prio)
-	}
-}
+// 	listA1.Add(4)
+// 	if listA1.First.Prio != 4 {
+// 		t.Errorf("wrong added, expected: Prio %d, got %d", 4, listA1.First.Prio)
+// 	}
+// }
 
 func TestAddWithBeforeRoot(t *testing.T) {
 	listA1 := LinkedListA1{First: &Node{Prio: 5}}

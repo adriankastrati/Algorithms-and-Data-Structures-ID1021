@@ -42,9 +42,7 @@ func (t *T9) Add(word string) {
 }
 
 func (t *T9) Search(key string) []string {
-
 	return t.Root.search(key, "")
-
 }
 
 func (n *Node) search(key string, path string) []string {

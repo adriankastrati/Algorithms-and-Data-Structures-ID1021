@@ -1,12 +1,8 @@
 package main
 
-import "algo/t9-trie/task"
+import task "algo/graphs"
 
 func main() {
-	// task.TestZipSB()
-	// println("slice bucket")
-	// task.TestZipSB()
-	// println("linked bucket")
-	// task.TestZipLB()
-	task.AddWord()
+	task.DFS()
+	task.PathSearch()
 }
